@@ -1,11 +1,5 @@
-// Copyright 2017, Paul DeMarco.
-// All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'dart:async';
-
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:get_storage/get_storage.dart';
@@ -15,7 +9,7 @@ import 'bluetooth_settings_screen.dart';
 import 'scan_page.dart';
 import 'widgets.dart';
 
-void main() async{
+void main() async {
   // await GetStorage.init();
   runApp(const FlutterBlueApp());
 }
@@ -27,22 +21,19 @@ class FlutterBlueApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.lightBlue,
-      home:
-      StreamBuilder<BluetoothState>(
+      home: StreamBuilder<BluetoothState>(
           stream: FlutterBluePlus.instance.state,
           initialData: BluetoothState.unknown,
           builder: (c, snapshot) {
             final state = snapshot.data;
             if (state == BluetoothState.on) {
-              return BluetoothSettingsScreen();
+              return const BluetoothSettingsScreen();
             }
             return BluetoothOffScreen(state: state);
           }),
     );
   }
 }
-
-
 
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
@@ -63,34 +54,34 @@ class DeviceScreen extends StatelessWidget {
     return services
         .map(
           (s) => ServiceTile(
-        service: s,
-        characteristicTiles: s.characteristics
-            .map(
-              (c) => CharacteristicTile(
-            characteristic: c,
-            onReadPressed: () => c.read(),
-            onWritePressed: () async {
-              await c.write(_getRandomBytes(), withoutResponse: true);
-              await c.read();
-            },
-            onNotificationPressed: () async {
-              await c.setNotifyValue(!c.isNotifying);
-              await c.read();
-            },
-            descriptorTiles: c.descriptors
+            service: s,
+            characteristicTiles: s.characteristics
                 .map(
-                  (d) => DescriptorTile(
-                descriptor: d,
-                onReadPressed: () => d.read(),
-                onWritePressed: () => d.write(_getRandomBytes()),
-              ),
-            )
+                  (c) => CharacteristicTile(
+                    characteristic: c,
+                    onReadPressed: () => c.read(),
+                    onWritePressed: () async {
+                      await c.write(_getRandomBytes(), withoutResponse: true);
+                      await c.read();
+                    },
+                    onNotificationPressed: () async {
+                      await c.setNotifyValue(!c.isNotifying);
+                      await c.read();
+                    },
+                    descriptorTiles: c.descriptors
+                        .map(
+                          (d) => DescriptorTile(
+                            descriptor: d,
+                            onReadPressed: () => d.read(),
+                            onWritePressed: () => d.write(_getRandomBytes()),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                )
                 .toList(),
           ),
         )
-            .toList(),
-      ),
-    )
         .toList();
   }
 
@@ -126,7 +117,7 @@ class DeviceScreen extends StatelessWidget {
                     text,
                     style: Theme.of(context)
                         .primaryTextTheme
-                        .button
+                        .labelLarge
                         ?.copyWith(color: Colors.white),
                   ));
             },
@@ -136,11 +127,14 @@ class DeviceScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ElevatedButton(onPressed: (){
-              device.services.listen((event) {print(event.toString());});
-              print(device.name);
-
-            }, child: const Text('tap')),
+            ElevatedButton(
+                onPressed: () {
+                  device.services.listen((event) {
+                    print(event.toString());
+                  });
+                  print(device.name);
+                },
+                child: const Text('tap')),
             StreamBuilder<BluetoothDeviceState>(
               stream: device.state,
               initialData: BluetoothDeviceState.connecting,
@@ -153,11 +147,12 @@ class DeviceScreen extends StatelessWidget {
                         : const Icon(Icons.bluetooth_disabled),
                     snapshot.data == BluetoothDeviceState.connected
                         ? StreamBuilder<int>(
-                        stream: rssiStream(),
-                        builder: (context, snapshot) {
-                          return Text(snapshot.hasData ? '${snapshot.data}dBm' : '',
-                              style: Theme.of(context).textTheme.caption);
-                        })
+                            stream: rssiStream(),
+                            builder: (context, snapshot) {
+                              return Text(
+                                  snapshot.hasData ? '${snapshot.data}dBm' : '',
+                                  style: Theme.of(context).textTheme.caption);
+                            })
                         : Text('', style: Theme.of(context).textTheme.caption),
                   ],
                 ),
@@ -229,6 +224,8 @@ class DeviceScreen extends StatelessWidget {
     // Device disconnected, stopping RSSI stream
   }
 }
+
+
 // class FindDevicesScreen extends StatelessWidget {
 //   const FindDevicesScreen({Key? key}) : super(key: key);
 //

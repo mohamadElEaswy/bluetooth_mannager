@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class BluetoothDevicesPage extends StatefulWidget {
+  const BluetoothDevicesPage({super.key});
+
   @override
-  _BluetoothDevicesPageState createState() => _BluetoothDevicesPageState();
+  BluetoothDevicesPageState createState() => BluetoothDevicesPageState();
 }
 
-class _BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
+class BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
   final List<BluetoothDevice> _devicesList = [];
 
   @override
@@ -46,14 +47,14 @@ class _BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Available Bluetooth Devices'),
+        title: const Text('Available Bluetooth Devices'),
       ),
       body: ListView.builder(
         itemCount: _devicesList.length,
         itemBuilder: (context, index) {
           final device = _devicesList[index];
           return ListTile(
-            title: Text(device.name ?? 'Unknown device'),
+            title: Text(device.name),
             subtitle: Text(device.id.toString()),
             trailing: ElevatedButton(
               onPressed: () async {
@@ -61,15 +62,17 @@ class _BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
                 await device.connect();
 
                 // Navigate to the device details screen
+
                 //TODO device details screen
-               // screen Navigator.push(
-               //    context,
-               //    MaterialPageRoute(
-               //      builder: (context) => DeviceDetailsScreen(device: device),
-               //    ),
-               //  );
+
+                // screen Navigator.push(
+                //    context,
+                //    MaterialPageRoute(
+                //      builder: (context) => DeviceDetailsScreen(device: device),
+                //    ),
+                //  );
               },
-              child: Text('Connect'),
+              child: const Text('Connect'),
             ),
           );
         },

@@ -147,7 +147,7 @@ class ServiceTile extends StatelessWidget {
       return ListTile(
         title: const Text('Service'),
         subtitle:
-        Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}'),
+            Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}'),
       );
     }
   }
@@ -162,11 +162,11 @@ class CharacteristicTile extends StatelessWidget {
 
   const CharacteristicTile(
       {Key? key,
-        required this.characteristic,
-        required this.descriptorTiles,
-        this.onReadPressed,
-        this.onWritePressed,
-        this.onNotificationPressed})
+      required this.characteristic,
+      required this.descriptorTiles,
+      this.onReadPressed,
+      this.onWritePressed,
+      this.onNotificationPressed})
       : super(key: key);
 
   @override
@@ -231,9 +231,9 @@ class DescriptorTile extends StatelessWidget {
 
   const DescriptorTile(
       {Key? key,
-        required this.descriptor,
-        this.onReadPressed,
-        this.onWritePressed})
+      required this.descriptor,
+      this.onReadPressed,
+      this.onWritePressed})
       : super(key: key);
 
   @override
@@ -247,7 +247,7 @@ class DescriptorTile extends StatelessWidget {
           Text('0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(color: Theme.of(context).textTheme.caption?.color))
         ],
       ),
@@ -291,11 +291,11 @@ class AdapterStateTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           'Bluetooth adapter is ${state.toString().substring(15)}',
-          style: Theme.of(context).primaryTextTheme.subtitle2,
+          style: Theme.of(context).primaryTextTheme.titleSmall,
         ),
         trailing: Icon(
           Icons.error,
-          color: Theme.of(context).primaryTextTheme.subtitle2?.color,
+          color: Theme.of(context).primaryTextTheme.titleSmall?.color,
         ),
       ),
     );

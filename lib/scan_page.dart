@@ -1,9 +1,8 @@
-
 import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-import 'dialog.dart';
+import 'src/ui/dialog.dart';
 import 'main.dart';
 
 class AvailableDevicesScreen extends StatefulWidget {
@@ -66,7 +65,7 @@ class AvailableDevicesScreenState extends State<AvailableDevicesScreen> {
                 BluetoothDeviceType type = result.device.type;
                 bool isBonded = _bondedDevices.contains(result.device);
                 return ListTile(
-                  title: Text(result.device.name ?? 'Unknown Device'),
+                  title: Text(result.device.name),
                   // subtitle: Column(
                   //   crossAxisAlignment: CrossAxisAlignment.start,
                   //   mainAxisAlignment: MainAxisAlignment.start,
@@ -84,23 +83,38 @@ class AvailableDevicesScreenState extends State<AvailableDevicesScreen> {
                           setState(() {
                             _bondedDevices.add(result.device);
                           });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            snackBar(
+                              msg: 'Device Added Succeffully!',
+                              context: context,
+                            ),
+                          );
                         });
                       } else {
-                        showDialog(
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          snackBar(
+                            msg: 'Failed to pair with this device!',
                             context: context,
-                            builder: (BuildContext context) => leadDialog);
+                          ),
+                        );
                       }
                     },
                   ),
                   onTap: () {
                     if (isBonded) {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) =>
-                              DeviceScreen(device: result.device)));
-                    }else{
-                      showDialog(
+                              DeviceScreen(device: result.device),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        snackBar(
+                          msg: 'This Device isn\'t bonded yet',
                           context: context,
-                          builder: (BuildContext context) => leadDialog);
+                        ),
+                      );
                     }
                   },
                 );
@@ -109,9 +123,7 @@ class AvailableDevicesScreenState extends State<AvailableDevicesScreen> {
           ),
           ElevatedButton(
             child: const Text('Scan for Devices'),
-            onPressed: () {
-              _startScan();
-            },
+            onPressed: () => _startScan(),
           ),
         ],
       ),

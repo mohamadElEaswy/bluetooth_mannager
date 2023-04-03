@@ -1,20 +1,24 @@
+import 'package:blue_print_pos/blue_print_pos.dart';
+import 'package:blue_print_pos/models/models.dart';
 import 'package:bluetooth_mannager/paired_devices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 import 'defualt_devices.dart';
 import 'new_devices_page.dart';
+import 'src/ui/dialog.dart';
 
 class BluetoothSettingsScreen extends StatefulWidget {
+  const BluetoothSettingsScreen({super.key});
+
   @override
-  _BluetoothSettingsScreenState createState() =>
-      _BluetoothSettingsScreenState();
+  BluetoothSettingsScreenState createState() => BluetoothSettingsScreenState();
 }
 
-class _BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
+class BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
   BluetoothDevice? _defaultDevice;
-
-  FlutterBluePlus _flutterBlue = FlutterBluePlus.instance;
+  BluePrintPos bluePrintPos = BluePrintPos.instance;
+  final FlutterBluePlus _flutterBlue = FlutterBluePlus.instance;
 
   @override
   void initState() {
@@ -45,14 +49,15 @@ class _BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
           ListTile(
             title: const Text('Default Device'),
             subtitle: _defaultDevice != null
-                ? Text(_defaultDevice!.name ?? 'Unknown Device')
+                ? Text(_defaultDevice!.name)
                 : const Text('Not set'),
             trailing: ElevatedButton(
               child: const Text('Select'),
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DefaultDevicesScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const DefaultDevicesScreen()),
                 );
                 // TODO: Implement loading a list of connected Bluetooth devices using _flutterBlue.connectedDevices and show them in a modal bottom sheet.
                 // When a device is selected, call _selectDefaultDevice to save the selected device as the default.
@@ -60,10 +65,10 @@ class _BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
             ),
           ),
           const Divider(),
-           ListTile(
+          ListTile(
             title: const Text('Paired Devices'),
             subtitle: const Text('Tap a device to connect'),
-            onTap: (){
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => PairedDevicesPage()),
@@ -71,13 +76,14 @@ class _BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
             },
           ),
           const Divider(),
-           ListTile(
+          ListTile(
             title: const Text('New Devices'),
             subtitle: const Text('Tap to scan for available devices'),
-            onTap: (){
+            onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BluetoothDevicesPage()),
+                MaterialPageRoute(
+                    builder: (context) => const BluetoothDevicesPage()),
               );
             },
           ),
@@ -93,10 +99,24 @@ class _BluetoothSettingsScreenState extends State<BluetoothSettingsScreen> {
                     itemBuilder: (context, index) {
                       BluetoothDevice device = devices[index];
                       return ListTile(
-                        title: Text(device.name ?? 'Unknown Device'),
+                        title: Text(device.name),
                         subtitle: Text(device.id.toString()),
-                        onTap: () {
-                          // TODO: Implement connecting to the selected Bluetooth device
+                        onTap: () async {
+                          // connect with other device
+
+                          bluePrintPos
+                              .connect(BlueDevice(
+                                  name: device.name, address: device.id.id))
+                              .then((value) => snackBar(
+                                    msg: 'connected Succeffully!',
+                                    context: context,
+                                  ))
+                              .catchError(
+                                (e) => snackBar(
+                                  msg: 'error $e',
+                                  context: context,
+                                ),
+                              );
                         },
                       );
                     },
