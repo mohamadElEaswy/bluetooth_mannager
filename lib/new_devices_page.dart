@@ -63,7 +63,7 @@ class BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
 
                 // Navigate to the device details screen
 
-                //TODO device details screen
+                //  TODO device details screen
 
                 // screen Navigator.push(
                 //    context,
@@ -80,55 +80,3 @@ class BluetoothDevicesPageState extends State<BluetoothDevicesPage> {
     );
   }
 }
-
-// class NewDevicesScreen extends StatefulWidget {
-//   @override
-//   _NewDevicesScreenState createState() => _NewDevicesScreenState();
-// }
-//
-// class _NewDevicesScreenState extends State<NewDevicesScreen> {
-//   FlutterBluePlus _flutterBlue = FlutterBluePlus.instance;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _flutterBlue.scan(timeout: const Duration(seconds: 5));
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('New Devices'),
-//       ),
-//       body: StreamBuilder<List<ScanResult>>(
-//         stream: _flutterBlue.scanResults.asBroadcastStream(),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             List<ScanResult> results = snapshot.data!;
-//             return ListView.builder(
-//               itemCount: results.length,
-//               itemBuilder: (context, index) {
-//                 ScanResult result = results[index];
-//                 return ListTile(
-//                   title: Text(result.device.name ?? 'Unknown Device'),
-//                   subtitle: Text(result.device.id.toString()),
-//                   trailing: ElevatedButton(
-//                     onPressed: () {
-//                       // TODO: Implement connecting to the selected device
-//                     },
-//                     child: const Text('Connect'),
-//                   ),
-//                 );
-//               },
-//             );
-//           } else if (snapshot.hasError) {
-//             return Text('Error: ${snapshot.error}');
-//           } else {
-//             return const CircularProgressIndicator();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }

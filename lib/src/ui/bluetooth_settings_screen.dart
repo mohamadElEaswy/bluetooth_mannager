@@ -4,9 +4,9 @@ import 'package:bluetooth_mannager/paired_devices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-import 'defualt_devices.dart';
-import 'new_devices_page.dart';
-import 'src/ui/dialog.dart';
+import '../../defualt_devices.dart';
+import '../../new_devices_page.dart';
+import 'dialog.dart';
 
 class BluetoothSettingsScreen extends StatefulWidget {
   const BluetoothSettingsScreen({super.key});
